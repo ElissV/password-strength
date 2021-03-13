@@ -126,7 +126,7 @@ export class MatPasswordStrengthComponent implements OnInit, OnChanges, AfterCon
       ]));
     this.validatorsArray.push(Validators.required);
     if (this.enableLengthRule) {
-      this.criteriaMap.set(Criteria.at_least_eight_chars, RegExp(`^.{${this.min},${this.max}}$`));
+      this.criteriaMap.set(Criteria.at_least_min_chars, RegExp(`^.{${this.min},}$`));
       this.validatorsArray.push(Validators.minLength(this.min));
       this.validatorsArray.push(Validators.maxLength(this.max));
     }
