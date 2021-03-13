@@ -55,6 +55,7 @@ export class MatPasswordStrengthComponent implements OnInit, OnChanges, AfterCon
   criteriaMap = new Map<Criteria, RegExp>();
 
   containAtLeastMinChars: boolean;
+  containNotMoreThanMaxChars: boolean;
   containAtLeastOneLowerCaseLetter: boolean;
   containAtLeastOneUpperCaseLetter: boolean;
   containAtLeastOneDigit: boolean;
@@ -128,6 +129,8 @@ export class MatPasswordStrengthComponent implements OnInit, OnChanges, AfterCon
     if (this.enableLengthRule) {
       this.criteriaMap.set(Criteria.at_least_min_chars, RegExp(`^.{${this.min},}$`));
       this.validatorsArray.push(Validators.minLength(this.min));
+
+      this.criteriaMap.set(Criteria.not_more_than_max_chars, RegExp(`^.{0,${this.max}}$`));
       this.validatorsArray.push(Validators.maxLength(this.max));
     }
     if (this.enableLowerCaseLetterRule) {
@@ -169,6 +172,7 @@ export class MatPasswordStrengthComponent implements OnInit, OnChanges, AfterCon
 
     requirements.push(
       this.enableLengthRule ? this._containAtLeastMinChars() : false,
+      this.enableLengthRule ? this._containNotMoreThanMaxChars() : false,
       this.enableLowerCaseLetterRule ? this._containAtLeastOneLowerCaseLetter() : false,
       this.enableUpperCaseLetterRule ? this._containAtLeastOneUpperCaseLetter() : false,
       this.enableDigitRule ? this._containAtLeastOneDigit() : false,
@@ -186,11 +190,12 @@ export class MatPasswordStrengthComponent implements OnInit, OnChanges, AfterCon
   reset() {
     this._strength = 0;
     this.containAtLeastMinChars =
-      this.containAtLeastOneLowerCaseLetter =
-        this.containAtLeastOneUpperCaseLetter =
-          this.containAtLeastOneDigit =
-            this.containAtCustomChars =
-              this.containAtLeastOneSpecialChar = false;
+      this.containNotMoreThanMaxChars =
+        this.containAtLeastOneLowerCaseLetter =
+          this.containAtLeastOneUpperCaseLetter =
+            this.containAtLeastOneDigit =
+              this.containAtCustomChars =
+                this.containAtLeastOneSpecialChar = false;
   }
 
   writeValue(obj: any): void {
@@ -214,6 +219,11 @@ export class MatPasswordStrengthComponent implements OnInit, OnChanges, AfterCon
   private _containAtLeastMinChars(): boolean {
     this.containAtLeastMinChars = this.password.length >= this.min;
     return this.containAtLeastMinChars;
+  }
+
+  private _containNotMoreThanMaxChars(): boolean {
+    this.containNotMoreThanMaxChars = this.password.length <= this.max;
+    return this.containNotMoreThanMaxChars;
   }
 
   private _containAtLeastOneLowerCaseLetter(): boolean {

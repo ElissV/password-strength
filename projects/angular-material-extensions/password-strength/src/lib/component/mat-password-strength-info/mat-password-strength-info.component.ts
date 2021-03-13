@@ -99,6 +99,9 @@ export class MatPasswordStrengthInfoComponent implements OnInit {
   minCharsCriteriaMsg: string;
 
   @Input()
+  maxCharsCriteriaMsg: string;
+
+  @Input()
   matIconDone = 'done';
 
   @Input()
@@ -106,7 +109,10 @@ export class MatPasswordStrengthInfoComponent implements OnInit {
 
   ngOnInit(): void {
     if (!this.minCharsCriteriaMsg) {
-      this.minCharsCriteriaMsg = `contains at least ${this.passwordComponent.min} characters`
+      this.minCharsCriteriaMsg = `contains at least ${this.passwordComponent.min} characters`;
+    }
+    if (!this.maxCharsCriteriaMsg) {
+      this.maxCharsCriteriaMsg = `contains not more than ${this.passwordComponent.max} characters`;
     }
   }
 
